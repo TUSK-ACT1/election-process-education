@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElectionGuide AI — Your Smart Election Assistant</title>
+  <meta name="description" content="ElectionGuide AI helps you understand the election process with personalized timelines, step-by-step guidance, and interactive checklists. Your smart civic assistant." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <path d="M32 4L8 18v28l24 14 24-14V18L32 4z" stroke="url(#loaderGrad)" stroke-width="2" fill="none" class="loader-hex"/>
+          <path d="M32 20v12l10 6" stroke="url(#loaderGrad)" stroke-width="2.5" stroke-linecap="round" fill="none" class="loader-check"/>
+          <defs>
+            <linearGradient id="loaderGrad" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#6C63FF"/>
+              <stop offset="100%" stop-color="#00D4AA"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2 class="loader-title">ElectionGuide AI</h2>
+      <p class="loader-subtitle">Initializing your smart election assistant...</p>
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Main Application -->
+  <div id="app" class="app hidden">
+    <!-- Header -->
+    <header id="app-header" class="app-header">
+      <div class="header-left">
+        <div class="logo" id="logo">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none">
+            <path d="M32 4L8 18v28l24 14 24-14V18L32 4z" stroke="url(#logoGrad)" stroke-width="2.5" fill="url(#logoFill)"/>
+            <path d="M24 32l6 6 12-14" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="64" y2="64">
+                <stop offset="0%" stop-color="#6C63FF"/>
+                <stop offset="100%" stop-color="#00D4AA"/>
+              </linearGradient>
+              <linearGradient id="logoFill" x1="0" y1="0" x2="64" y2="64">
+                <stop offset="0%" stop-color="rgba(108,99,255,0.15)"/>
+                <stop offset="100%" stop-color="rgba(0,212,170,0.08)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo-text">ElectionGuide <span class="logo-ai">AI</span></span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="mode-switcher" id="mode-switcher">
+          <button class="mode-btn active" data-mode="chat" id="mode-chat-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </button>
+          <button class="mode-btn" data-mode="timeline" id="mode-timeline-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Timeline
+          </button>
+          <button class="mode-btn" data-mode="checklist" id="mode-checklist-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Checklist
+          </button>
+          <button class="mode-btn" data-mode="quiz" id="mode-quiz-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Quiz
+          </button>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-btn" id="explanation-mode-btn" title="Toggle explanation depth">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span class="btn-label" id="explanation-label">Simple</span>
+        </button>
+        <button class="header-btn" id="reset-btn" title="Start over">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+
+      <!-- Chat Panel -->
+      <section id="chat-panel" class="panel chat-panel active">
+        <div class="chat-container" id="chat-container">
+          <div class="chat-messages" id="chat-messages">
+            <!-- Messages injected here -->
+          </div>
+        </div>
+        <div class="chat-input-area" id="chat-input-area">
+          <div class="quick-actions" id="quick-actions">
+            <!-- Quick action buttons injected here -->
+          </div>
+          <div class="input-wrapper">
+            <textarea id="user-input" class="user-input" placeholder="Type your question or reply..." rows="1"></textarea>
+            <button id="send-btn" class="send-btn" title="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+          <p class="input-disclaimer">ElectionGuide AI provides general civic education. Always verify with official election sources.</p>
+        </div>
+      </section>
+
+      <!-- Timeline Panel -->
+      <section id="timeline-panel" class="panel timeline-panel">
+        <div class="panel-header">
+          <h2>Your Election Timeline</h2>
+          <p class="panel-subtitle" id="timeline-subtitle">Complete the intake to generate a personalized timeline</p>
+        </div>
+        <div class="timeline-content" id="timeline-content">
+          <div class="empty-state" id="timeline-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="1.5" opacity="0.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <h3>No timeline yet</h3>
+            <p>Complete the intake conversation to generate your personalized election timeline.</p>
+          </div>
+          <div class="timeline-track hidden" id="timeline-track">
+            <!-- Timeline items injected here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Checklist Panel -->
+      <section id="checklist-panel" class="panel checklist-panel">
+        <div class="panel-header">
+          <h2>Your Election Checklist</h2>
+          <div class="checklist-progress" id="checklist-progress">
+            <div class="progress-ring">
+              <svg width="56" height="56" viewBox="0 0 56 56">
+                <circle cx="28" cy="28" r="24" stroke="rgba(108,99,255,0.15)" stroke-width="4" fill="none"/>
+                <circle id="progress-circle" cx="28" cy="28" r="24" stroke="url(#progressGrad)" stroke-width="4" fill="none" stroke-dasharray="150.8" stroke-dashoffset="150.8" stroke-linecap="round" transform="rotate(-90 28 28)"/>
+                <defs>
+                  <linearGradient id="progressGrad" x1="0" y1="0" x2="56" y2="56">
+                    <stop offset="0%" stop-color="#6C63FF"/>
+                    <stop offset="100%" stop-color="#00D4AA"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span class="progress-text" id="progress-text">0%</span>
+            </div>
+          </div>
+        </div>
+        <div class="checklist-content" id="checklist-content">
+          <div class="empty-state" id="checklist-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="1.5" opacity="0.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <h3>No checklist yet</h3>
+            <p>Complete the intake conversation to generate your personalized checklist.</p>
+          </div>
+          <div class="checklist-groups hidden" id="checklist-groups">
+            <!-- Checklist groups injected here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Quiz Panel -->
+      <section id="quiz-panel" class="panel quiz-panel">
+        <div class="panel-header">
+          <h2>Quick Knowledge Check</h2>
+          <p class="panel-subtitle">Test your understanding of the election process</p>
+        </div>
+        <div class="quiz-content" id="quiz-content">
+          <div class="quiz-start" id="quiz-start">
+            <div class="quiz-intro-card">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="url(#quizGrad)" stroke-width="1.2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                <defs>
+                  <linearGradient id="quizGrad" x1="0" y1="0" x2="24" y2="24">
+                    <stop offset="0%" stop-color="#6C63FF"/>
+                    <stop offset="100%" stop-color="#00D4AA"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h3>Election Process Quiz</h3>
+              <p>Answer 5 quick questions to check your understanding of the election process.</p>
+              <button class="btn-primary" id="start-quiz-btn">Start Quiz</button>
+            </div>
+          </div>
+          <div class="quiz-active hidden" id="quiz-active">
+            <div class="quiz-progress-bar">
+              <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+            </div>
+            <div class="quiz-question-card" id="quiz-question-card">
+              <span class="quiz-question-number" id="quiz-question-number">Question 1 of 5</span>
+              <h3 class="quiz-question-text" id="quiz-question-text"></h3>
+              <div class="quiz-options" id="quiz-options">
+                <!-- Options injected here -->
+              </div>
+              <button class="btn-primary hidden" id="quiz-next-btn">Next Question</button>
+            </div>
+          </div>
+          <div class="quiz-results hidden" id="quiz-results">
+            <div class="quiz-results-card" id="quiz-results-card">
+              <!-- Results injected here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fab-action" title="What should I do now?">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <span class="fab-label">What Now?</span>
+    </button>
+
+    <!-- Next Action Card (overlay) -->
+    <div class="next-action-overlay hidden" id="next-action-overlay">
+      <div class="next-action-card" id="next-action-card">
+        <button class="close-btn" id="close-next-action">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="next-action-content" id="next-action-content">
+          <!-- Content injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="election-data.js"></script>
+  <script src="decision-engine.js"></script>
+  <script src="quiz.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
